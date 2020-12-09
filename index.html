@@ -6,26 +6,29 @@
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Thanados GeoJSON to CSV</title>
-  <style>
-      body {
-          display: flex;
-          flex-direction: column;
-          height: 100vh;
-          padding: 0;
-      }
-
-      textarea {
-          flex-grow: 1;
-      }
-  </style>
+  <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-<label for="input">Paste GeoJSON data</label>
-<textarea id="input"></textarea>
-<button onclick="convert()">Convert</button>
-<label for="output">Paste GeoJSON data</label>
-<textarea id="output"></textarea>
-<button onclick="download()">Download</button>
+<body class="h-screen flex flex-col">
+  <header class="flex-shrink-0 flex-grow-0 text-center p-8">
+    <h1 class="text-3xl pb-2">Thanados GeoJSON to CSV Converter</h1>
+    <p>A utility for importing data to Airtable.</p>
+    <p>Paste a single array to extract polygons from the input to the CSV output.</p>
+  </header>
+  <main class="flex-grow flex px-8 pb-8 flex-col md:flex-row">
+    <section class="flex-grow flex flex-col w-full md:w-1/2 md:mx-2 mb-4 rounded shadow-md border border-gray-100">
+      <label for="input" class="pt-4 px-2 text-center"><h2>Paste GeoJSON data</h2></label>
+      <textarea id="input" class="flex-grow mx-2 my-4 p-2 rounded border-2 border-gray-100 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-blue-400"></textarea>
+      <button onclick="convert()" class="p-4 rounded font-semibold text-white bg-blue-500 hover:bg-blue-700">Convert</button>
+    </section>
+    <section class="flex-grow flex flex-col w-full md:w-1/2 md:mx-2 mb-4 rounded shadow-md border border-gray-100">
+      <label for="output" class="pt-4 px-2 text-center"><h2>CSV Output</h2></label>
+      <textarea id="output" readonly class="flex-grow mx-2 my-4 p-2 rounded border-2 border-gray-100 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-blue-400"></textarea>
+      <button onclick="download()" class="p-4 rounded font-semibold text-white bg-blue-500 hover:bg-blue-700">Download CSV</button>
+    </section>
+  </main>
+  <footer class="flex-grow-0 flex-shrink-0 text-center px-8 py-4 bg-gray-100">
+    <p>Created by <a href="https://deytah.io/" target="_blank" class="text-blue-500 underline">Deytah</a> • Hosted on Netlify • Fork it on <a href="https://github.com/deytah/thanados-geojson-to-csv/" target="_blank" class="text-blue-500 underline">GitHub</a>.</p>
+  </footer>
 <script>
   const input = document.getElementById('input');
   const output = document.getElementById('output');
