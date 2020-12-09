@@ -1,2 +1,5 @@
 # thanados-geojson-to-csv
-Reformat Thanados GeoJSON to CSV. Created as an import to Airtable utility.
+
+A utility for importing data to Airtable.
+
+Paste a single array to extract polygons from the input to the CSV output.
