@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Thanados GeoJSON to CSV</title>
+  <style>
+      body {
+          display: flex;
+          flex-direction: column;
+          height: 100vh;
+          padding: 0;
+      }
+
+      textarea {
+          flex-grow: 1;
+      }
+  </style>
+</head>
+<body>
+<label for="input">Paste GeoJSON data</label>
+<textarea id="input"></textarea>
+<button onclick="convert()">Convert</button>
+<label for="output">Paste GeoJSON data</label>
+<textarea id="output"></textarea>
+<button onclick="download()">Download</button>
+<script>
+  const input = document.getElementById('input');
+  const output = document.getElementById('output');
+
+  function convert() {
+    const lines = [];
+    try {
+      const text = input.value.trim();
+      const parts = text.split(['];']);
+      const json = parts[0].replace(/var gisPoint.* = /, '') + ']';
+      const data = JSON.parse(json);
+      const keys = Object.keys(data[0].properties);
+      keys.push('geometry');
+      lines.push(keys.join(','));
+      data.filter(feature => feature.geometry.type !== 'Point').forEach(feature => {
+        const row = Object.values(feature.properties).map(item => `"${item}"`);
+        row.push('"' + JSON.stringify(feature.geometry).replace(/"/g, '""') + '"');
+        lines.push(row.join(','));
+      });
+      output.value = lines.join('\r\n');
+    } catch (e) {
+      alert('Could not parse JSON.');
+    }
+  }
+
+  function download() {
+    const uri = 'data:application/csv;charset=utf-8,' + escape(output.value);
+    const link = document.createElement('a');
+    link.href = uri;
+    link.style.visibility = 'hidden';
+    link.download = 'output.csv';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+</script>
+</body>
+</html>
